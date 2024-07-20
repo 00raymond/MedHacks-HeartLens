@@ -1,16 +1,13 @@
-# medhacks
+# HeartLens
 
-A new Flutter project.
+Flutter project aimed at helping people identify heart arrythmias all at home, using phone camera based photoplethysmography and machine learning.
 
-## Getting Started
+## How to run it?
 
-This project is a starting point for a Flutter application.
+First, make sure Flutter framework is installed correctly on your pc. A guide on how to install can be found [here](https://docs.flutter.dev/get-started/install). Make sure it's running correct using ```flutter doctor```, this will help verify the setup.
 
-A few resources to get you started if this is your first Flutter project:
+After receiving dependencies using ```flutter pub get```, this project can be ran using ```flutter run``` in the terminal in the root directory, with different cross-platform options to run. I strongly suggest using an iPhone or Android emulator, or better an actual device.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Where can I see it in action?
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+A video demonstrating the full capabilities of the app can be found [here]().
