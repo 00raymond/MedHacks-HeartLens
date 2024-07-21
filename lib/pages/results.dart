@@ -13,11 +13,18 @@ class ResultsPage extends StatelessWidget {
 
   int _calculatePulse() {
 
+    for (double val in brightnessValues) {
+      if (val > 50 || val < 30) {
+        // remove values that are too high or too low
+        brightnessValues.remove(val);
+      }
+    }
+
     // Implement pulse calculation here
     // 15 seconds of brightnessValues are stored in the brightnessValues list
 
     // count how many peaks in the brightnessValues list = pulses in 15 seconds.
-    if (brightnessValues.length < 3) {
+    if (brightnessValues.length < 5) {
       return 0;
     }
     int peakCount = 0;
