@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:medhacks/data/DataManager.dart';
+import 'package:medhacks/pages/saves.dart';
 import 'package:medhacks/types/Scan.dart';
+import 'package:quickalert/quickalert.dart';
 
 class ResultsPage extends StatelessWidget {
 
@@ -49,10 +51,7 @@ class ResultsPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // const LineChart(
-                  
 
-                // ),
                 const Text('Results:', style: TextStyle(fontSize: 24)),
                 const SizedBox(height: 20),
                 Text('Average brightness: ${filteredValues.reduce((a, b) => a + b) / filteredValues.length}', style: TextStyle(fontSize: 18, color:Colors.white)),
@@ -82,6 +81,29 @@ class ResultsPage extends StatelessWidget {
                     Scan scan = Scan(pulse: _calculatePulse(), filteredValues: filteredValues, dateTime: dateTime);
                     DataManager().storeLocalScan(scan);
                     // create popup modal saying "Successfully saved! 🎉" with "Home" and "View All Results" buttons beneath that text. also X to close the modal
+                    QuickAlert.show(
+                      context: context,
+                      barrierDismissible: false,
+                      type: QuickAlertType.success,
+                      text: 'Saved scan to local files.',
+                      confirmBtnText:'All Results',
+                      cancelBtnText: 'Home',
+                      showCancelBtn: true,
+                      onConfirmBtnTap: () {
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => SavesPage()),
+                        );
+                      },
+                      onCancelBtnTap: () {
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                      },
+                    );
                   },
                   child: Text('💾 Save Results', style:TextStyle(color:Colors.white, fontSize: 30)),
                   ),

@@ -33,4 +33,33 @@ class DataManager {
     return scans;
   }
 
+  void updateScans(List<Scan> scans) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    // save scan objects to shared preferences
+    List<String> scansJson = scans.map((scan) => jsonEncode(scan.toJson())).toList();
+    await prefs.setStringList('scans', scansJson);
+  }
+
+  Future<List<Scan>> deleteLocalScans(Set<Scan> deleted) async {
+    // convert set to list
+    List<Scan> deletedList = deleted.toList();
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    // load scan objects from shared preferences
+    List<String> scansJson = prefs.getStringList('scans') ?? [];
+    List<Scan> scans = scansJson.map((scan) => Scan.fromJson(jsonDecode(scan))).toList();
+
+    List<Scan> updatedScans = scans.where((scan) {
+      return !deletedList.any((deletedScan) => deletedScan.dateTime == scan.dateTime);
+    }).toList();
+
+    // save scan objects to shared preferences
+    List<String> updatedScansJson = updatedScans.map((scan) => jsonEncode(scan.toJson())).toList();
+    await prefs.setStringList('scans', updatedScansJson);
+
+    return updatedScans;
+  }
+
 }

@@ -129,7 +129,14 @@ class _SavesPageState extends State<SavesPage> {
                 child: TextButton(
                   style: TextButton.styleFrom(primary: Colors.white),
                   onPressed: () {
-                    // TODO
+
+                    DataManager dataManager = DataManager();
+                    print("here");
+                    scans = dataManager.deleteLocalScans(_selectedScans);
+                    // refresh page
+                    setState(() {
+                      _selectedScans.clear();
+                    });
                   },
                   child: const Text("Delete 🗑️", style: TextStyle(fontSize: 30)),
                 ),
