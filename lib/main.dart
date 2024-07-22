@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:medhacks/pages/camera.dart';
+import 'package:medhacks/pages/saves.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,15 +27,6 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
 
   final String title;
 
@@ -75,9 +67,8 @@ class _MyHomePageState extends State<MyHomePage> {
           // wireframe for each widget.
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Container(child:Image.asset('lib/assets/logo.png', width: 400, height: 100)),
-            Container(child: const Text('Welcome.', style: TextStyle(fontSize: 30, color: Colors.white))),
-            Container(child: const Text('Please remember to allow camera access when asked', style: TextStyle(fontSize: 14, color: Colors.grey))),
+            Container(child:Image.asset('lib/assets/logo.png', width: 400, height: 75)),
+            Container(child: const Text('Please remember to allow camera access when prompted to.', textAlign: TextAlign.center, style: TextStyle(fontSize: 20, color: Colors.grey))),
             Container(height:10,),
             SizedBox(
               width: 200,
@@ -94,7 +85,25 @@ class _MyHomePageState extends State<MyHomePage> {
                   foregroundColor: Colors.white, backgroundColor: Colors.deepPurple, disabledForegroundColor: Colors.grey.withOpacity(0.38),
                 ),
 
-                child: const Text('Capture', style: TextStyle(fontSize: 24.0)),
+                child: const Text('Capture 📷', style: TextStyle(fontSize: 24.0)),
+              ),
+              
+            ),
+            const SizedBox(height:10),
+            Container(
+              width: 200,
+              height: 50,
+              child: TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const SavesPage()),
+                  );
+                },
+                style: TextButton.styleFrom(
+                  foregroundColor: Colors.black, backgroundColor: Colors.white, disabledForegroundColor: Colors.grey.withOpacity(0.38),
+                ),
+                child: const Text('Saved Scans', style: TextStyle(fontSize: 24.0)),
               ),
             ),
           ],

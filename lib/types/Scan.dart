@@ -1,5 +1,4 @@
 class Scan {
-
   final List<double> filteredValues;
   final String dateTime;
   final int pulse;
@@ -17,21 +16,20 @@ class Scan {
   factory Scan.fromJson(Map<String, dynamic> json) {
     return Scan(
       pulse: json['pulse'],
-      filteredValues: json['filteredValues'],
+      filteredValues: (json['filteredValues'] as List).map((e) => e.toDouble() as double).toList(),
       dateTime: json['dateTime'],
     );
   }
 
-  getPulse() {
+  int getPulse() {
     return pulse;
   }
 
-  getFilteredValues() {
+  List<double> getFilteredValues() {
     return filteredValues;
   }
 
-  getDateTime() {
+  String getDateTime() {
     return dateTime;
   }
-
 }
