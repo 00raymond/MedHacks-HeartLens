@@ -21,7 +21,7 @@ class ResultsPage extends StatelessWidget {
     int peakCount = 0;
     int seconds = 15;
     double factor = 60 / seconds;
-    const int fingerThreshold = 50;
+    const int fingerThreshold = 100;
 
     for (int i = 2; i < filteredValues.length - 2; i++) {
       if (filteredValues[i] < fingerThreshold) {
