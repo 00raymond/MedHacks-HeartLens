@@ -6,16 +6,22 @@ class DataManager {
   factory DataManager() => _instance;
   DataManager._internal();
 
-  List<String> _data = [];
-
   Future<void> storeLocalScan(Scan data) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    // save 
+    // save scan object to array in shared preferences
+
 
   }
 
-  List<String> getData() {
-    return _data;
+  Future<List<Scan>> loadLocalScans() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    List<Scan> _localScans = [];
+
+    // load scan objects from shared preferences
+
+    return _localScans;
   }
+
 }

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:medhacks/data/DataManager.dart';
+import 'package:medhacks/types/Scan.dart';
 
 class ResultsPage extends StatelessWidget {
 
@@ -77,6 +79,9 @@ class ResultsPage extends StatelessWidget {
                   ),
                   onPressed: () {
                     // save this stuff locally. when user accesses their past records, itll show a stream of their past results: time saved, pulse
+                    Scan scan = Scan(pulse: _calculatePulse(), filteredValues: filteredValues, dateTime: dateTime);
+                    DataManager().storeLocalScan(scan);
+                    // create popup modal saying "Successfully saved! 🎉" with "Home" and "View All Results" buttons beneath that text. also X to close the modal
                   },
                   child: Text('💾 Save Results', style:TextStyle(color:Colors.white, fontSize: 30)),
                   ),
