@@ -127,7 +127,7 @@ class _SavesPageState extends State<SavesPage> {
                   borderRadius: BorderRadius.circular(10.0),
                 ),
                 child: TextButton(
-                  style: TextButton.styleFrom(primary: Colors.white),
+                  style: TextButton.styleFrom(foregroundColor: Colors.white),
                   onPressed: () {
 
                     DataManager dataManager = DataManager();
