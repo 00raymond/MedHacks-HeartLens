@@ -2,29 +2,18 @@ import 'package:flutter/material.dart';
 
 class ResultsPage extends StatelessWidget {
 
-  final List<double> brightnessValues;
+  final List<double> filteredValues;
+  final String dateTime;
 
-  ResultsPage({required this.brightnessValues});
+  ResultsPage({super.key, required this.filteredValues, required this.dateTime});
 
-  @override
   void initState() {
     _calculatePulse();
   }
-
+  
   int _calculatePulse() {
 
-    for (double val in brightnessValues) {
-      if (val > 50 || val < 30) {
-        // remove values that are too high or too low
-        brightnessValues.remove(val);
-      }
-    }
-
-    // Implement pulse calculation here
-    // 15 seconds of brightnessValues are stored in the brightnessValues list
-
-    // count how many peaks in the brightnessValues list = pulses in 15 seconds.
-    if (brightnessValues.length < 5) {
+    if (filteredValues.length < 5) {
       return 0;
     }
     int peakCount = 0;
@@ -32,12 +21,12 @@ class ResultsPage extends StatelessWidget {
     double factor = 60 / seconds;
     const int fingerThreshold = 50;
 
-    for (int i = 2; i < brightnessValues.length - 2; i++) {
-      if (brightnessValues[i] < fingerThreshold) {
+    for (int i = 2; i < filteredValues.length - 2; i++) {
+      if (filteredValues[i] < fingerThreshold) {
         // threshold means the brightness value is low enough to be considered finger covering the camera
         // check if the next value is less than the current value and the value after that is lower than the current value
-        if (brightnessValues[i + 1] < brightnessValues[i] && brightnessValues[i] > brightnessValues[i-1]) {
-          if (brightnessValues[i + 2] < brightnessValues[i] && brightnessValues[i] > brightnessValues[i-2]) {
+        if (filteredValues[i + 1] < filteredValues[i] && filteredValues[i] > filteredValues[i-1]) {
+          if (filteredValues[i + 2] < filteredValues[i] && filteredValues[i] > filteredValues[i-2]) {
               // peak detected
               peakCount++;
           }
@@ -47,17 +36,9 @@ class ResultsPage extends StatelessWidget {
 
     // The pulse should be calculated from these values
     double pulsePerMinute = peakCount * factor;
-
-
-
-    // The pulse should be returned as a double
-
-
-
     return pulsePerMinute.toInt();
   }
 
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
@@ -66,14 +47,18 @@ class ResultsPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('Results:', style: TextStyle(fontSize: 24)),
-                SizedBox(height: 20),
-                Text('Average brightness: ${brightnessValues.reduce((a, b) => a + b) / brightnessValues.length}', style: TextStyle(fontSize: 18, color:Colors.white)),
-                SizedBox(height: 20),
-                Text('Max brightness: ${brightnessValues.reduce((a, b) => a > b ? a : b)}', style: TextStyle(fontSize: 18, color:Colors.white)),
-                SizedBox(height: 20),
-                Text('Min brightness: ${brightnessValues.reduce((a, b) => a < b ? a : b)}', style: TextStyle(fontSize: 18, color:Colors.white)),
-                SizedBox(height: 20),
+                // const LineChart(
+                  
+
+                // ),
+                const Text('Results:', style: TextStyle(fontSize: 24)),
+                const SizedBox(height: 20),
+                Text('Average brightness: ${filteredValues.reduce((a, b) => a + b) / filteredValues.length}', style: TextStyle(fontSize: 18, color:Colors.white)),
+                const SizedBox(height: 20),
+                Text('Max brightness: ${filteredValues.reduce((a, b) => a > b ? a : b)}', style: TextStyle(fontSize: 18, color:Colors.white)),
+                const SizedBox(height: 20),
+                Text('Min brightness: ${filteredValues.reduce((a, b) => a < b ? a : b)}', style: TextStyle(fontSize: 18, color:Colors.white)),
+                const SizedBox(height: 20),
                 Text('Pulse: ${_calculatePulse()} BPM', style: TextStyle(fontSize: 18, color:Colors.white)),
               ],
             ),
@@ -82,13 +67,33 @@ class ResultsPage extends StatelessWidget {
             bottom: 20,
             left: 20,
             right: 20,
-            child: ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-                Navigator.pop(context);
-              },
-              child: Text('Redo Scan'),
-            ),
+            child: Column(
+              children: [
+                Container(
+                  width: double.maxFinite,
+                  child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.deepPurple,
+                  ),
+                  onPressed: () {
+                    // save this stuff locally. when user accesses their past records, itll show a stream of their past results: time saved, pulse
+                  },
+                  child: Text('💾 Save Results', style:TextStyle(color:Colors.white, fontSize: 30)),
+                  ),
+                ),
+                Container(
+                  width: double.maxFinite,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    },
+                    child: Text('🔄 Redo Scan', style:TextStyle(color:Colors.black, fontSize: 24)),
+                  ),
+                ),
+
+            ],)
+            
           ),
         ],
       ),
