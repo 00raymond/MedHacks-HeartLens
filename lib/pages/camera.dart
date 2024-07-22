@@ -2,8 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:medhacks/main.dart';
+import 'package:medhacks/pages/results.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:camera/camera.dart';
+import 'package:fl_chart/fl_chart.dart';
+
 
 List<CameraDescription> _cameras = [];
 
@@ -18,10 +21,10 @@ class _CameraPageState extends State<CameraPage> {
   CameraController? _controller;
   bool _isCameraInitialized = false;
   bool _isCountingDown = false;
+  bool _imageStreamOn = false;
   String _countdownText = 'Press start and hold your fingertip still over the front camera for accurate results.';
   int _countdown = 3;
   final List<double> _brightnessValues = [];
-  final List<double> _redChannelValues = [];
 
   @override
   void initState() {
@@ -36,14 +39,14 @@ class _CameraPageState extends State<CameraPage> {
     } else {
       _cameras = await availableCameras();
       if (_cameras.isNotEmpty) {
-      _controller = CameraController(_cameras.first, ResolutionPreset.high); //uses first camera get available cameras list
-      _controller!.initialize().then((_) {
-        if(!mounted) return;
-        setState(() {
-          _isCameraInitialized = true;
+        _controller = CameraController(_cameras.first, ResolutionPreset.high);
+        _controller!.initialize().then((_) {
+          if (!mounted) return;
+          setState(() {
+            _isCameraInitialized = true;
+          });
         });
-      });
-    }
+      }
     }
   }
 
@@ -62,11 +65,11 @@ class _CameraPageState extends State<CameraPage> {
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const MyHomePage(title: 'Home',)),
-                  );
-                },
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const MyHomePage(title: 'Home')),
+                );
+              },
               child: const Text('OK'),
             ),
           ],
@@ -76,39 +79,38 @@ class _CameraPageState extends State<CameraPage> {
   }
 
   void _startEvaluation() {
-
     _brightnessValues.clear();
-    _redChannelValues.clear();
 
     setState(() {
       _countdownText = "Scanning...\nPlease hold still.";
     });
 
     _controller?.startImageStream((CameraImage image) {
+      _imageStreamOn = true;
 
       double brightness = calculateBrightness(image);
-      double redChannel = calculateRedChannel(image);
 
       setState(() {
         _brightnessValues.add(brightness);
-        _redChannelValues.add(redChannel);
       });
     });
 
-    int timeRemaining = 20;
+    int timeRemaining = 15;
     Timer.periodic(const Duration(seconds: 1), (timer) {
       if (timeRemaining == 0) {
-        _controller?.stopImageStream();
-        // _controller?.dispose();
-
+        _stopImageStreamAndDispose();
         setState(() {
           _countdownText = "Scan complete. \nNavigating to results...";
         });
 
         print('Brightness values: $_brightnessValues');
-        print('Red channel values: $_redChannelValues');
 
         timer.cancel();
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ResultsPage(brightnessValues: _brightnessValues)),
+        );
       } else {
         setState(() {
           _countdownText = "Scanning...\n$timeRemaining seconds remaining.";
@@ -118,33 +120,27 @@ class _CameraPageState extends State<CameraPage> {
     });
   }
 
-// Function to calculate brightness from a CameraImage
-double calculateBrightness(CameraImage image) {
-  int totalBrightness = 0;
-  int pixelCount = image.planes[0].bytes.length;
-
-  for (int i = 0; i < pixelCount; i++) {
-    totalBrightness += image.planes[0].bytes[i];
+  void _stopImageStreamAndDispose() async {
+    if (_controller != null && _imageStreamOn) {
+      await _controller?.stopImageStream();
+      _imageStreamOn = false;
+    }
+    _controller?.dispose();
   }
 
-  return totalBrightness / pixelCount;
-}
+  double calculateBrightness(CameraImage image) {
+    int totalBrightness = 0;
+    int pixelCount = image.planes[0].bytes.length;
 
-// Function to calculate red channel value from a CameraImage
-double calculateRedChannel(CameraImage image) {
-  int totalRedChannel = 0;
-  int pixelCount = image.planes[0].bytes.length;
+    for (int i = 0; i < pixelCount; i++) {
+      totalBrightness += image.planes[0].bytes[i];
+    }
 
-  for (int i = 0; i < pixelCount; i += 3) {
-    totalRedChannel += image.planes[0].bytes[i]; // Assuming the red channel is in the first plane
+    return totalBrightness / pixelCount;
   }
-
-  return totalRedChannel / (pixelCount ~/ 3);
-}
-
 
   void _startCountdown() {
-    _countdownText="Starting Countdown...";
+    _countdownText = "Starting Countdown...";
     setState(() {
       _isCountingDown = true;
     });
@@ -161,6 +157,11 @@ double calculateRedChannel(CameraImage image) {
     });
   }
 
+  @override
+  void dispose() {
+    _stopImageStreamAndDispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -230,7 +231,7 @@ double calculateRedChannel(CameraImage image) {
             child: FloatingActionButton(
               backgroundColor: Colors.deepPurple,
               onPressed: () {
-                _controller?.dispose();
+                _stopImageStreamAndDispose();
                 Navigator.pop(context);
               },
               child: const Icon(Icons.arrow_back, color: Colors.white),
