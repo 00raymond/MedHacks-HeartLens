@@ -5,6 +5,8 @@ import 'package:medhacks/main.dart';
 import 'package:medhacks/pages/results.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:camera/camera.dart';
+import 'package:fl_chart/fl_chart.dart';
+
 
 List<CameraDescription> _cameras = [];
 
