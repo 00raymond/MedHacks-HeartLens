@@ -5,7 +5,7 @@ import 'package:medhacks/main.dart';
 import 'package:medhacks/pages/results.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:camera/camera.dart';
-import 'package:fl_chart/fl_chart.dart';
+import 'package:intl/intl.dart';
 
 
 List<CameraDescription> _cameras = [];
@@ -107,9 +107,15 @@ class _CameraPageState extends State<CameraPage> {
 
         timer.cancel();
 
+        List<double> _filteredValues = _brightnessValues.where((val) => val > 30 && val < 50).toList();
+
+        DateTime now = DateTime.now();
+        String dateTime = '${now.year}-${now.month}-${now.day} ${now.hour}:${now.minute}:${now.second}';
+
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => ResultsPage(brightnessValues: _brightnessValues)),
+          // get current date and time
+          MaterialPageRoute(builder: (context) => ResultsPage(filteredValues: _filteredValues, dateTime: dateTime)),
         );
       } else {
         setState(() {
