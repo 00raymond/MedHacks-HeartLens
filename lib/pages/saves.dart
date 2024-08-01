@@ -13,7 +13,10 @@ class SavesPage extends StatefulWidget {
 
 class _SavesPageState extends State<SavesPage> {
 
+  /// Scans receieved from local storage, possibly empty.
   late Future<List<Scan>> scans;
+
+  /// Set of selected scans, possibly empty.
   final Set<Scan> _selectedScans = Set<Scan>();
 
   @override
@@ -23,6 +26,7 @@ class _SavesPageState extends State<SavesPage> {
     scans = dataManager.loadLocalScans();
   }
 
+  /// Toggle selection of a scan, allows for scan deletion from local storage.
   void _toggleSelection(Scan scan) {
     setState(() {
       if (_selectedScans.contains(scan)) {
@@ -128,16 +132,18 @@ class _SavesPageState extends State<SavesPage> {
                 ),
                 child: TextButton(
                   style: TextButton.styleFrom(foregroundColor: Colors.white),
-                  onPressed: () {
 
+                  /// Delete selected scans
+                  onPressed: () {
                     DataManager dataManager = DataManager();
-                    print("here");
                     scans = dataManager.deleteLocalScans(_selectedScans);
-                    // refresh page
+
+                    // Refresh page
                     setState(() {
                       _selectedScans.clear();
                     });
                   },
+
                   child: const Text("Delete 🗑️", style: TextStyle(fontSize: 30)),
                 ),
               ) : SizedBox(),
