@@ -53,14 +53,14 @@ class ResultsPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
 
-                const Text('Results:', style: TextStyle(fontSize: 24)),
+                const Text('Results', style: TextStyle(fontSize: 24, color:Colors.white)),
                 const SizedBox(height: 20),
-                Text('Average brightness: ${filteredValues.reduce((a, b) => a + b) / filteredValues.length}', style: TextStyle(fontSize: 18, color:Colors.white)),
-                const SizedBox(height: 20),
-                Text('Max brightness: ${filteredValues.reduce((a, b) => a > b ? a : b)}', style: TextStyle(fontSize: 18, color:Colors.white)),
-                const SizedBox(height: 20),
-                Text('Min brightness: ${filteredValues.reduce((a, b) => a < b ? a : b)}', style: TextStyle(fontSize: 18, color:Colors.white)),
-                const SizedBox(height: 20),
+                // Text('Average brightness: ${filteredValues.reduce((a, b) => a + b) / filteredValues.length}', style: TextStyle(fontSize: 18, color:Colors.white)),
+                // const SizedBox(height: 20),
+                // Text('Max brightness: ${filteredValues.reduce((a, b) => a > b ? a : b)}', style: TextStyle(fontSize: 18, color:Colors.white)),
+                // const SizedBox(height: 20),
+                // Text('Min brightness: ${filteredValues.reduce((a, b) => a < b ? a : b)}', style: TextStyle(fontSize: 18, color:Colors.white)),
+                // const SizedBox(height: 20),
                 Text('Pulse: ${_calculatePulse()} BPM', style: TextStyle(fontSize: 18, color:Colors.white)),
               ],
             ),
@@ -106,7 +106,7 @@ class ResultsPage extends StatelessWidget {
                       },
                     );
                   },
-                  child: Text('💾 Save Results', style:TextStyle(color:Colors.white, fontSize: 30)),
+                  child: const Text('💾 Save Results', style:TextStyle(color:Colors.white, fontSize: 30)),
                   ),
                 ),
                 Container(
@@ -116,7 +116,7 @@ class ResultsPage extends StatelessWidget {
                       Navigator.pop(context);
                       Navigator.pop(context);
                     },
-                    child: Text('🔄 Redo Scan', style:TextStyle(color:Colors.black, fontSize: 24)),
+                    child: const Text('🔄 Redo Scan', style:TextStyle(color:Colors.black, fontSize: 24)),
                   ),
                 ),
 
