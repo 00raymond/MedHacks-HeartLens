@@ -22,6 +22,8 @@ class _CameraPageState extends State<CameraPage> {
   bool _imageStreamOn = false;
   String _countdownText = 'Press start and hold your fingertip still over the front camera for accurate results.';
   int _countdown = 3;
+
+  /// List of brightness values from camera stream
   final List<double> _brightnessValues = [];
 
   @override
@@ -30,6 +32,7 @@ class _CameraPageState extends State<CameraPage> {
     _initCamera();
   }
 
+  /// Initialize camera and ask for device camera permission
   void _initCamera() async {
     final status = await _checkCameraPermission();
     if (status == PermissionStatus.denied) {
@@ -48,6 +51,7 @@ class _CameraPageState extends State<CameraPage> {
     }
   }
 
+  /// Check camera permission
   Future<PermissionStatus> _checkCameraPermission() async {
     final status = await Permission.camera.request();
     return status;
@@ -76,6 +80,7 @@ class _CameraPageState extends State<CameraPage> {
     );
   }
 
+  /// Start evaluation of brightness values from camera stream
   void _startEvaluation() {
     _brightnessValues.clear();
 
@@ -127,6 +132,7 @@ class _CameraPageState extends State<CameraPage> {
     });
   }
 
+  /// Safely end camera stream and dispose of camera controller
   void _stopImageStreamAndDispose() async {
     if (_controller != null && _imageStreamOn) {
       await _controller?.stopImageStream();
@@ -135,6 +141,7 @@ class _CameraPageState extends State<CameraPage> {
     _controller?.dispose();
   }
 
+  /// Calculate brightness of camera image
   double calculateBrightness(CameraImage image) {
     int totalBrightness = 0;
     int pixelCount = image.planes[0].bytes.length;
@@ -146,6 +153,7 @@ class _CameraPageState extends State<CameraPage> {
     return totalBrightness / pixelCount;
   }
 
+  /// Start countdown before evaluation
   void _startCountdown() {
     _countdownText = "Starting Countdown...";
     setState(() {
@@ -164,6 +172,7 @@ class _CameraPageState extends State<CameraPage> {
     });
   }
 
+  /// Upon disposing of camera page, call method to safely sstop image stream and dispose of camera controller
   @override
   void dispose() {
     _stopImageStreamAndDispose();

@@ -15,6 +15,7 @@ class ResultsPage extends StatelessWidget {
     _calculatePulse();
   }
   
+  /// Calculate pulse from filtered values over 15 seconds
   int _calculatePulse() {
 
     if (filteredValues.length < 5) {
