@@ -1,4 +1,4 @@
-![HeartLens](https://raw.githubusercontent.com/00raymond/MedHacks-HeartLens/main/lib/assets/logo.png?token=GHSAT0AAAAAACM42F7PHYK5UTB2P4M4UUZUZVTFXMQ)
+# HeartLens
 
 Flutter project aimed at helping people identify heart arrythmias all at home, using phone camera based photoplethysmography and machine learning.
 
