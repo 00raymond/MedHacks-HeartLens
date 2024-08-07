@@ -2,6 +2,8 @@
 
 Flutter project aimed at helping people identify heart arrythmias all at home, using phone camera based photoplethysmography and machine learning.
 
+This repository is the **mobile app** component of the HeartLens project. Only patient accounts can sign in and upload their data to the cloud using this app. Doctors and admins can interact with user accounts and view respective data through the [doctor/admin portal website](https://github.com/00raymond/heartlensPortal).
+
 ## How to run it?
 
 First, make sure Flutter framework is installed correctly on your pc. A guide on how to install can be found [here](https://docs.flutter.dev/get-started/install). Make sure it's running correct using ```flutter doctor```, this will help verify the setup.
