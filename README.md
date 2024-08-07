@@ -12,6 +12,6 @@ After receiving dependencies using ```flutter pub get```, this project can be ra
 
 ## Where can I see it in action?
 
-A video demonstrating the full capabilities of the app can be found [here]().
+A video demonstrating the full capabilities of the app can be found [here](https://www.youtube.com/watch?v=r2rrfsugdok&ab_channel=RaymondHouse).
 
 *submission by Raymond House for MedHacks Season 2*
