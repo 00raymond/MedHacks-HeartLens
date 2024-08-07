@@ -1,9 +1,17 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:medhacks/firebase_options.dart';
+import 'package:medhacks/homeAppbar.dart';
 import 'package:medhacks/pages/camera.dart';
 import 'package:medhacks/pages/saves.dart';
 
-void main() {
+
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -41,6 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     return Scaffold(
       backgroundColor: Colors.black38,
+      appBar:HomeAppBar(),
       body: Center(
 
         child: Column(

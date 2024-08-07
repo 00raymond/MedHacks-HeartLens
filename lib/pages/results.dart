@@ -53,7 +53,7 @@ class ResultsPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
 
-                const Text('Results', style: TextStyle(fontSize: 24, color:Colors.white)),
+                const Text('Results', style: TextStyle(fontSize: 24, color:Colors.white, fontWeight: FontWeight.bold)),
                 const SizedBox(height: 20),
                 // Text('Average brightness: ${filteredValues.reduce((a, b) => a + b) / filteredValues.length}', style: TextStyle(fontSize: 18, color:Colors.white)),
                 // const SizedBox(height: 20),
@@ -61,7 +61,8 @@ class ResultsPage extends StatelessWidget {
                 // const SizedBox(height: 20),
                 // Text('Min brightness: ${filteredValues.reduce((a, b) => a < b ? a : b)}', style: TextStyle(fontSize: 18, color:Colors.white)),
                 // const SizedBox(height: 20),
-                Text('Pulse: ${_calculatePulse()} BPM', style: TextStyle(fontSize: 18, color:Colors.white)),
+                Text('Pulse: ${_calculatePulse()} BPM', style: const TextStyle(fontSize: 18, color:Colors.white)),
+                const Text('Other calculations will be emailed when available.', style: TextStyle(fontSize: 18, color:Colors.white)),
               ],
             ),
           ),
