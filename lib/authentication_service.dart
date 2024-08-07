@@ -10,6 +10,8 @@ class AuthenticationService {
   get authStateChanges => null;
 
   /// Use to sign in, will check for patient status. Only patients can sign into the mobile app.
+  /// Checks if the user is a patient and only allows patients to sign in.
+  /// throw [FirebaseAuthException] if invalid user type
   Future signIn({
     required String email,
     required String password
@@ -63,12 +65,13 @@ class AuthenticationService {
   }
 }
 
-  void uploadPatientData(List<String> data, String uploadDate) async {
+  void uploadPatientData(List<double> data, String uploadDate, int pulse) async {
     // add the list of strings to another array thats in: users/{uid}/data[] list of uploadDate's mapped to a list of strings.
     await FirebaseFirestore.instance.collection('users').doc(_auth.currentUser!.uid).update({
       'data': FieldValue.arrayUnion([{
         'date': uploadDate,
-        'data': data
+        'data': data,
+        'pulse': pulse
       }])
     });
   }

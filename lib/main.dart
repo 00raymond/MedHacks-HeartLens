@@ -9,9 +9,11 @@ import 'package:medhacks/pages/saves.dart';
 import 'package:provider/provider.dart';
 
 
-
 void main() async {
+  /// Ensure that Flutter binding is properly initialized
   WidgetsFlutterBinding.ensureInitialized();
+
+  /// Initialize Firebase using default options specified in `firebase_options.dart`
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -34,7 +36,7 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
+  // Root of application
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

@@ -1,5 +1,7 @@
 // saves page with home FAB, scrollable array of saved scans, listing out their pulse and time saved.
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:medhacks/authentication_service.dart';
 import 'package:medhacks/data/dataManager.dart';
 import 'package:medhacks/types/Scan.dart';
 
@@ -15,6 +17,9 @@ class _SavesPageState extends State<SavesPage> {
 
   /// Scans receieved from local storage, possibly empty.
   late Future<List<Scan>> scans;
+
+  /// Firebase authentication service
+  final AuthenticationService _authService = AuthenticationService(FirebaseAuth.instance);
 
   /// Set of selected scans, possibly empty.
   final Set<Scan> _selectedScans = Set<Scan>();
@@ -111,10 +116,52 @@ class _SavesPageState extends State<SavesPage> {
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: const Text("Home 🏠", style: TextStyle(fontSize: 30)),
+                child: const Text("<", style: TextStyle(fontSize: 30)),
               ),
             ),
-            SizedBox(width: 20),
+            // Upload button
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 200),
+              transitionBuilder: (Widget child, Animation<double> animation) {
+                return ScaleTransition(
+                  scale: Tween<double>(begin: 0.6, end: 1.0)
+                      .chain(CurveTween(curve: Curves.elasticOut))
+                      .animate(animation),
+                  child: child,
+                );
+              },
+              child: _selectedScans.isNotEmpty ? Container(
+                decoration: BoxDecoration(
+                  color: Colors.blue,
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                child: TextButton(
+                  style: TextButton.styleFrom(foregroundColor: Colors.white),
+                  onPressed: () {
+
+                    for (Scan scan in _selectedScans) {
+                      // Upload scan to cloud
+                      _authService.uploadPatientData(scan.filteredValues, scan.dateTime, scan.pulse);
+
+                    }
+
+                    DataManager dataManager = DataManager();
+                    // Remove scan from local storage
+                    dataManager.deleteLocalScans(_selectedScans);
+
+                    // Refresh page
+                    setState(() {
+                      _selectedScans.clear();
+                    });
+
+                    Navigator.pop(context);
+
+                  },
+
+                  child: const Text("Upload", style: TextStyle(fontSize: 30)),
+                ),
+              ) : SizedBox(),
+            ),
             AnimatedSwitcher(
               duration: const Duration(milliseconds: 200),
               transitionBuilder: (Widget child, Animation<double> animation) {
@@ -144,7 +191,7 @@ class _SavesPageState extends State<SavesPage> {
                     });
                   },
 
-                  child: const Text("Delete 🗑️", style: TextStyle(fontSize: 30)),
+                  child: const Text("Delete", style: TextStyle(fontSize: 30)),
                 ),
               ) : SizedBox(),
             ),
