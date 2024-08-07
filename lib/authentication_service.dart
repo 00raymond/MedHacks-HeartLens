@@ -1,3 +1,4 @@
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -20,7 +21,7 @@ class AuthenticationService {
       DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(user.user!.uid).get();
       if (userDoc.exists) {
         if ((userDoc.data() as Map<String, dynamic>)['userType'] == 'patient') {
-          return "success";
+          return null;
         } else {
           await _auth.signOut();
           throw 'Invalid user type';
@@ -43,5 +44,32 @@ class AuthenticationService {
   /// Get current authentiacted user signed into platform
   User? getCurrentUser() {
     return _auth.currentUser;
+  }
+
+  Future<String> getCurrentUserName() async {
+  if (_auth.currentUser == null) return 'Guest'; // Handle the case where there's no user
+  try {
+    DocumentSnapshot userDoc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(_auth.currentUser!.uid)
+        .get();
+    if (userDoc.exists) {
+      return (userDoc.data() as Map<String, dynamic>)['name'] ?? 'No Name';
+    } else {
+      return 'No Name';
+    }
+  } catch (e) {
+    return 'Error';
+  }
+}
+
+  void uploadPatientData(List<String> data, String uploadDate) async {
+    // add the list of strings to another array thats in: users/{uid}/data[] list of uploadDate's mapped to a list of strings.
+    await FirebaseFirestore.instance.collection('users').doc(_auth.currentUser!.uid).update({
+      'data': FieldValue.arrayUnion([{
+        'date': uploadDate,
+        'data': data
+      }])
+    });
   }
 }

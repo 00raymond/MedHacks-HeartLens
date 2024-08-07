@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:medhacks/authentication_service.dart';
@@ -18,17 +19,23 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       leading: Container(),
       title: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
+          Spacer(),
           if (user != null) ...[
-            Text(
-              user.displayName ?? "tempName",
-              style: const TextStyle(color: Colors.white),
+            const Text(
+              "",
+              style: TextStyle(color: Colors.white),
             ),
             const SizedBox(width: 10),
             GestureDetector(
               onTap: () async {
                 await _authService.signOut();
+                // refresh the app
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SignInPage()),
+                );
               },
               child: const Row(
                 children: [

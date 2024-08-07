@@ -1,9 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:medhacks/authentication_service.dart';
 import 'package:medhacks/firebase_options.dart';
 import 'package:medhacks/homeAppbar.dart';
 import 'package:medhacks/pages/camera.dart';
 import 'package:medhacks/pages/saves.dart';
+import 'package:provider/provider.dart';
 
 
 
@@ -12,7 +15,20 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        Provider<AuthenticationService>(
+          create: (_) => AuthenticationService(FirebaseAuth.instance),
+        ),
+        StreamProvider(
+          create: (context) => context.read<AuthenticationService>().authStateChanges,
+          initialData: null,
+        )
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
